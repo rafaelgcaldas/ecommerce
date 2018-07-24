@@ -3,6 +3,7 @@
 	use \Hcode\Page;
 	use \Hcode\Model\Product;
 	use \Hcode\Model\Category;
+	use \Hcode\Model\Cart;
 
     // Rota Home Page Site
 	$app->get("/", function() {
@@ -45,5 +46,12 @@
 			"product"=>$product->getValues(),
 			"categories"=>$product->getCategories()
 		]);
+	});
+
+	$app->get("/cart", function(){
+		Cart::getFromSession();
+		$page = new Page();
+
+		$page->setTpl("cart");
 	});
 ?>
