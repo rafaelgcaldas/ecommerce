@@ -21,23 +21,24 @@
 
     $app->post("/admin/orders/:idorder/status", function($idorder){
         User::verifyLogin();
-        $order = new Order();
-
+        
         if(!isset($_POST["idstatus"]) || !(int)$_POST["idstatus"] > 0){
             Order::setError("Informe o status atual!");
             header("Location: /admin/orders/".$idorder."/status");
             exit;
         }
 
+        $order = new Order();
+
         $order->get((int)$idorder);
         $order->setidstatus((int)$_POST["idstatus"]);
+
         $order->save();
 
         Order::setSuccess("Status atualizado com sucesso!");
         header("Location: /admin/orders/".$idorder."/status");
         exit;
     });
-
 
     $app->get("/admin/orders/:idorder/delete", function($idorder){
         User::verifyLogin();

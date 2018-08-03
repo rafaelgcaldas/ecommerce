@@ -186,6 +186,9 @@
 		$address->setData($_POST);
 		$address->save();
 
+		$_SESSION[Cart::SESSION] = NULL;
+		session_regenerate_id();
+
 		$cart->getCalculateTotal();
 
 		$order->setData([
