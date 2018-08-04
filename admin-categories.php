@@ -31,8 +31,6 @@
 			]);
 		}
 
-		
-		
 		$page = new PageAdmin();
 
 		$page->setTpl("categories", [
