@@ -11,8 +11,6 @@
 		$search = (isset($_GET["search"])) ? $_GET["search"] : "";
 		$page = (isset($_GET["page"])) ? $_GET["page"] : 1;
 		
-		$categories = Category::listAll();
-
 		if($search != ""){
 			$pagination = Category::getPageSearch($search, $page);
 		} else {
@@ -23,7 +21,7 @@
 
 		for ($x=0; $x < $pagination["pages"]; $x++) { 
 			array_push($pages, [
-				"href"=>"/admin/users?".http_build_query([
+				"href"=>"/admin/categories?".http_build_query([
 					"page"=>$x + 1,
 					"search"=>$search
 				]),

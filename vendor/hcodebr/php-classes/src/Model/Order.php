@@ -103,5 +103,56 @@
         public static function clearSuccess(){
             $_SESSION[Order::SUCCESS] = NULL;
         }
+
+        public static function getPage($page = 1, $itemsPerPage = 10){
+            $sql = new Sql();
+            $start = ($page - 1) * $itemsPerPage;
+
+            $results = $sql->select("SELECT SQL_CALC_FOUND_ROWS *
+                FROM tb_orders a
+                INNER JOIN tb_ordersstatus b USING(idstatus)
+                INNER JOIN tb_carts c USING(idcart)
+                INNER JOIN tb_users d ON d.iduser = a .iduser
+                INNER JOIN tb_addresses e USING(idaddress)
+                INNER JOIN tb_persons f ON f.idperson = d.idperson
+                ORDER BY a.dtregister DESC
+                LIMIT $start, $itemsPerPage;"
+            );
+
+            $resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrTotal;");
+
+            return [
+                "data"=>$results,
+                "total"=>(int)$resultTotal[0]["nrTotal"],
+                "pages"=>ceil($resultTotal[0]["nrTotal"] / $itemsPerPage)
+            ];
+        }
+
+        public static function getPageSearch($search, $page = 1, $itemsPerPage = 10){
+            $sql = new Sql();
+            $start = ($page - 1) * $itemsPerPage;
+
+            $results = $sql->select("SELECT SQL_CALC_FOUND_ROWS *
+                FROM tb_orders a
+                INNER JOIN tb_ordersstatus b USING(idstatus)
+                INNER JOIN tb_carts c USING(idcart)
+                INNER JOIN tb_users d ON d.iduser = a .iduser
+                INNER JOIN tb_addresses e USING(idaddress)
+                INNER JOIN tb_persons f ON f.idperson = d.idperson
+                WHERE a.idorder = :id OR f.desperson LIKE :search
+                ORDER BY a.dtregister DESC
+                LIMIT $start, $itemsPerPage;",array(
+                    ":id"=>$search,
+                    ":search"=>"%" . $search . "%"
+            ));
+
+            $resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrTotal;");
+
+            return [
+                "data"=>$results,
+                "total"=>(int)$resultTotal[0]["nrTotal"],
+                "pages"=>ceil($resultTotal[0]["nrTotal"] / $itemsPerPage)
+            ];
+        }
     }
 ?>
