@@ -41,10 +41,11 @@
         public function save(){
             $sql = new Sql();
 
-            $results = $sql->select("CALL sp_addresses_save(:idaddress, :idperson, :desaddress, :complement, :descity, :desstate, :descountry, :deszipcode, :desdistrict)", array(
+            $results = $sql->select("CALL sp_addresses_save(:idaddress, :idperson, :desaddress, :desnumber, :complement, :descity, :desstate, :descountry, :deszipcode, :desdistrict)", array(
                 "idaddress"=>$this->getidaddress(),
                 "idperson"=>$this->getidperson(),
                 "desaddress"=>utf8_decode($this->getdesaddress()),
+                "desnumber"=>$this->getdesnumber(),
                 "complement"=>utf8_decode($this->getcomplement()),
                 "descity"=>utf8_decode($this->getdescity()),
                 "desstate"=>utf8_decode($this->getdesstate()),
